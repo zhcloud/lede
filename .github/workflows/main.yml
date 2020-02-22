@@ -55,3 +55,22 @@ jobs:
     - name: SSH connection to Actions
       uses: P3TERX/debugger-action@master
       if: env.SSH_ACTIONS == 'true'
+
+    - name: Upload bin directory
+      uses: actions/upload-artifact@master
+      with:
+        name: OpenWrt_directory
+        path: bin
+
+    - name: Organize files
+      id: organize
+      run: |
+        cd bin/targets/*/*
+        rm -rf packages
+        echo "::set-env name=FIRMWARE::$(pwd)"
+
+    - name: Upload firmware directory
+      uses: actions/upload-artifact@master
+      with:
+        name: OpenWrt_firmware
+        path: ${{ env.FIRMWARE }}
